@@ -24,7 +24,7 @@ namespace SmartFeedbackPortal.API.Controllers
         }
 
         [HttpPost("submit")]
-        public IActionResult SubmitFeedback(FeedbackDto dto)
+        public IActionResult SubmitFeedback([FromBody] FeedbackDto dto)
         {
             try
             {
@@ -33,6 +33,7 @@ namespace SmartFeedbackPortal.API.Controllers
                     return Unauthorized("Invalid token");
 
                 var userId = int.Parse(userIdClaim.Value);
+                Console.WriteLine($"[SubmitFeedback] UserId: {userId}");
 
                 var sentiment = _sentiment.Analyze(dto.Content);
 
@@ -47,11 +48,12 @@ namespace SmartFeedbackPortal.API.Controllers
                 _context.Feedbacks.Add(feedback);
                 _context.SaveChanges();
 
-                return Ok(new { message = "Feedback submitted", sentiment });
+                return Ok(new { message = "Feedback submitted successfully", sentiment });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while submitting feedback: {ex.Message}");
+                Console.WriteLine($"Error submitting feedback: {ex.Message}");
+                return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
 
@@ -91,7 +93,7 @@ namespace SmartFeedbackPortal.API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while fetching feedback: {ex.Message}");
+                return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
     }

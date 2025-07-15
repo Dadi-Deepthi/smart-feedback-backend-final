@@ -3892,19 +3892,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\User\\.nuget\\packages\\": {}
+    "C:\\Users\\labadmin\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\SmartFeedbackPortal\\SmartFeedbackPortal.API\\SmartFeedbackPortal.API.csproj",
+      "projectUniqueName": "C:\\Users\\labadmin\\own\\smart-feedback-portal-backend-ownd\\SmartFeedbackPortal.API.csproj",
       "projectName": "SmartFeedbackPortal.API",
-      "projectPath": "C:\\Users\\User\\SmartFeedbackPortal\\SmartFeedbackPortal.API\\SmartFeedbackPortal.API.csproj",
-      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\SmartFeedbackPortal\\SmartFeedbackPortal.API\\obj\\",
+      "projectPath": "C:\\Users\\labadmin\\own\\smart-feedback-portal-backend-ownd\\SmartFeedbackPortal.API.csproj",
+      "packagesPath": "C:\\Users\\labadmin\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\labadmin\\own\\smart-feedback-portal-backend-ownd\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\labadmin\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"

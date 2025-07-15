@@ -4,6 +4,6 @@ namespace SmartFeedbackPortal.API.DTOs
     {
         public string Username { get; set; } = "";
         public string Password { get; set; } = "";
-        public string Role { get; set; } = "User"; // default is User
+        public string Role { get; set; } = "User";
     }
 }
