@@ -27,6 +27,10 @@ namespace SmartFeedbackPortal.API.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Department")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Sentiment")
                         .IsRequired()
                         .HasColumnType("TEXT");

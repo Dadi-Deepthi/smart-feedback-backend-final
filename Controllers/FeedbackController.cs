@@ -23,6 +23,8 @@ namespace SmartFeedbackPortal.API.Controllers
             _sentiment = sentiment;
         }
 
+        // ✅ POST: api/Feedback/submit
+        [Authorize(Roles = "User")]
         [HttpPost("submit")]
         public IActionResult SubmitFeedback([FromBody] FeedbackDto dto)
         {
@@ -33,7 +35,6 @@ namespace SmartFeedbackPortal.API.Controllers
                     return Unauthorized("Invalid token");
 
                 var userId = int.Parse(userIdClaim.Value);
-                Console.WriteLine($"[SubmitFeedback] UserId: {userId}");
 
                 var sentiment = _sentiment.Analyze(dto.Content);
 
@@ -41,6 +42,7 @@ namespace SmartFeedbackPortal.API.Controllers
                 {
                     Content = dto.Content,
                     Sentiment = sentiment,
+                    Department = dto.Department,
                     UserId = userId,
                     SubmittedAt = DateTime.UtcNow
                 };
@@ -52,11 +54,12 @@ namespace SmartFeedbackPortal.API.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error submitting feedback: {ex.Message}");
+                Console.WriteLine($"❌ Error submitting feedback: {ex.Message}");
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
 
+        // ✅ GET: api/Feedback/all
         [HttpGet("all")]
         public IActionResult GetAllFeedback()
         {
@@ -73,26 +76,50 @@ namespace SmartFeedbackPortal.API.Controllers
 
                 IQueryable<Feedback> query = _context.Feedbacks.Include(f => f.User);
 
-                if (role != "Admin")
+                if (role == "Admin")
                 {
-                    query = query.Where(f => f.UserId == userId);
+                    // ✅ Group feedbacks by department for Admin
+                    var groupedFeedback = query
+                        .ToList()
+                        .GroupBy(f => f.Department)
+                        .Select(group => new
+                        {
+                            Department = group.Key,
+                            Feedbacks = group.Select(f => new
+                            {
+                                f.Id,
+                                f.Content,
+                                f.Sentiment,
+                                f.SubmittedAt,
+                                f.Department,
+                                Username = f.User != null ? f.User.Username : "Unknown"
+                            }).ToList()
+                        }).ToList();
+
+                    return Ok(groupedFeedback);
                 }
+                else
+                {
+                    // ✅ Normal user: return only their own feedbacks
+                    var userFeedbacks = query
+                        .Where(f => f.UserId == userId)
+                        .Select(f => new
+                        {
+                            f.Id,
+                            f.Content,
+                            f.Sentiment,
+                            f.SubmittedAt,
+                            f.Department,
+                            Username = f.User != null ? f.User.Username : "Unknown"
+                        })
+                        .ToList();
 
-                var feedbacks = query
-                    .Select(f => new
-                    {
-                        f.Id,
-                        f.Content,
-                        f.Sentiment,
-                        f.SubmittedAt,
-                        Username = f.User != null ? f.User.Username : "Unknown"
-                    })
-                    .ToList();
-
-                return Ok(feedbacks);
+                    return Ok(userFeedbacks);
+                }
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"❌ Error retrieving feedback: {ex.Message}");
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }

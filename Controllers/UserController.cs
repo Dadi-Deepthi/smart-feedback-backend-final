@@ -4,6 +4,9 @@ using SmartFeedbackPortal.API.Data;
 using SmartFeedbackPortal.API.DTOs;
 using SmartFeedbackPortal.API.Models;
 using SmartFeedbackPortal.API.Services;
+using System;
+using BCrypt.Net;
+
 
 namespace SmartFeedbackPortal.API.Controllers
 {
@@ -31,17 +34,20 @@ namespace SmartFeedbackPortal.API.Controllers
                     return BadRequest("Username already exists");
                 }
 
+                // 🔐 Hash the password before saving
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+
                 var user = new User
                 {
                     Username = dto.Username,
-                    Password = dto.Password, // In production, always hash this!
-                    Role = dto.Role
+                    Password = hashedPassword,
+                    Role = dto.Role ?? "User"
                 };
 
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
-                return Ok();
+                return Ok(new { message = "User registered successfully" });
             }
             catch (Exception ex)
             {
@@ -57,9 +63,9 @@ namespace SmartFeedbackPortal.API.Controllers
             try
             {
                 var user = await _context.Users
-                    .FirstOrDefaultAsync(u => u.Username == dto.Username && u.Password == dto.Password);
+                    .FirstOrDefaultAsync(u => u.Username == dto.Username);
 
-                if (user == null)
+                if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
                 {
                     return Unauthorized("Invalid credentials");
                 }
@@ -69,7 +75,8 @@ namespace SmartFeedbackPortal.API.Controllers
                 return Ok(new
                 {
                     token,
-                    role = user.Role
+                    role = user.Role,
+                    username = user.Username
                 });
             }
             catch (Exception ex)

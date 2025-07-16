@@ -11,20 +11,21 @@ var builder = WebApplication.CreateBuilder(args);
 // ✅ Add Controllers
 builder.Services.AddControllers();
 
-// ✅ Configure EF Core with SQLite
+// ✅ Configure EF Core with SQLite (local storage)
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=SmartFeedback.db";
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite("Data Source=SmartFeedback.db"));
+    options.UseSqlite(connectionString));
 
-// ✅ Add Application Services
+// ✅ Register Custom Services
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<SentimentService>();
 
-// ✅ Configure CORS for frontend
+// ✅ Configure CORS for frontend (React on port 3000)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.WithOrigins("http://localhost:3000") // Your frontend origin
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -39,7 +40,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
         if (key.Length < 32)
         {
-            throw new Exception("JWT key must be at least 32 bytes (256 bits).");
+            throw new Exception("JWT key must be at least 32 bytes long.");
         }
 
         options.TokenValidationParameters = new TokenValidationParameters
@@ -54,14 +55,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// ✅ Swagger for testing
+// ✅ Swagger for API documentation/testing
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Smart Feedback API", Version = "v1" });
 
+    // 🔐 Add JWT support to Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "Enter 'Bearer {token}'",
+        Description = "Enter 'Bearer {token}' in the header",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
@@ -79,13 +81,14 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            Array.Empty<string>()
+            new string[] {}
         }
     });
 });
 
 var app = builder.Build();
 
+// ✅ Enable Swagger in Development
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -11,8 +11,8 @@ using SmartFeedbackPortal.API.Data;
 namespace SmartFeedbackPortal.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250714163936_AddUserRole")]
-    partial class AddUserRole
+    [Migration("20250716124614_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,6 +27,10 @@ namespace SmartFeedbackPortal.API.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Department")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -67,18 +71,26 @@ namespace SmartFeedbackPortal.API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Username")
+                        .IsUnique();
+
                     b.ToTable("Users");
                 });
 
             modelBuilder.Entity("SmartFeedbackPortal.API.Models.Feedback", b =>
                 {
                     b.HasOne("SmartFeedbackPortal.API.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Feedbacks")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SmartFeedbackPortal.API.Models.User", b =>
+                {
+                    b.Navigation("Feedbacks");
                 });
 #pragma warning restore 612, 618
         }

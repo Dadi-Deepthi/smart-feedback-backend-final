@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SmartFeedbackPortal.API.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,8 @@ namespace SmartFeedbackPortal.API.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Username = table.Column<string>(type: "TEXT", nullable: false),
-                    Password = table.Column<string>(type: "TEXT", nullable: false)
+                    Password = table.Column<string>(type: "TEXT", nullable: false),
+                    Role = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -33,6 +34,7 @@ namespace SmartFeedbackPortal.API.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Content = table.Column<string>(type: "TEXT", nullable: false),
                     Sentiment = table.Column<string>(type: "TEXT", nullable: false),
+                    Department = table.Column<string>(type: "TEXT", nullable: false),
                     SubmittedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -51,6 +53,12 @@ namespace SmartFeedbackPortal.API.Migrations
                 name: "IX_Feedbacks_UserId",
                 table: "Feedbacks",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Username",
+                table: "Users",
+                column: "Username",
+                unique: true);
         }
 
         /// <inheritdoc />
