@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\labadmin\\own\\smart-feedback-portal-backend-ownd\\SmartFeedbackPortal.API.csproj": {}
+    "C:\\Users\\User\\own\\smart-feedback-backend-final\\SmartFeedbackPortal.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\labadmin\\own\\smart-feedback-portal-backend-ownd\\SmartFeedbackPortal.API.csproj": {
+    "C:\\Users\\User\\own\\smart-feedback-backend-final\\SmartFeedbackPortal.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\labadmin\\own\\smart-feedback-portal-backend-ownd\\SmartFeedbackPortal.API.csproj",
+        "projectUniqueName": "C:\\Users\\User\\own\\smart-feedback-backend-final\\SmartFeedbackPortal.API.csproj",
         "projectName": "SmartFeedbackPortal.API",
-        "projectPath": "C:\\Users\\labadmin\\own\\smart-feedback-portal-backend-ownd\\SmartFeedbackPortal.API.csproj",
-        "packagesPath": "C:\\Users\\labadmin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\labadmin\\own\\smart-feedback-portal-backend-ownd\\obj\\",
+        "projectPath": "C:\\Users\\User\\own\\smart-feedback-backend-final\\SmartFeedbackPortal.API.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\User\\own\\smart-feedback-backend-final\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\labadmin\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
